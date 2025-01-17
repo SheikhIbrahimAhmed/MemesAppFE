@@ -66,7 +66,7 @@ const Signup = () => {
 
         try {
 
-            const response = await axios.post('http://localhost:5000/api/post/upload-user-image', formData, {
+            const response = await axios.post('http://localhost:5000/api/upload/upload-user-image', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },

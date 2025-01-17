@@ -1,0 +1,27 @@
+.custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+    height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.tag-button {
+    min-height: 40px;
+    height: 50px;
+    width: auto;
+    padding: 0 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border-radius: 9999px;
+    white-space: nowrap;
+}

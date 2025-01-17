@@ -1,16 +1,15 @@
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
-import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { backendUrl, getUser } from '../shared/constants/constant';
+import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
+import { backendUrl } from '../shared/constants/constant';
 import { useNavigate } from 'react-router-dom';
 import image1 from '../assets/images/logo.webp'
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 const navigation = [
-    { name: 'Home', href: '/show-posts', current: true },
-    { name: 'My Posts', href: '/show-my-posts', current: false },
-    { name: 'Add Post', href: '/create-post', current: false },
-    { name: 'Add User', href: '/signup', current: false },
+    { name: 'Home', href: '/show-memes', current: true },
+    { name: 'Upload Meme', href: '/post-meme', current: false },
+    { name: 'My Memes', href: '/show-my-memes', current: false },
 ];
 
 function classNames(...classes) {

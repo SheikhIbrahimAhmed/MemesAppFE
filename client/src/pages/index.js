@@ -1,5 +1,5 @@
 export { default as Signup } from './signup';
 export { default as Login } from './login';
-export { default as ShowPosts } from './showPosts';
-export { default as ShowMyPosts } from './showmyposts';
-export { default as PostPage } from './postpage';
+export { default as ShowMemes } from './showMemes';
+export { default as ShowMyMemes } from './showMyMemes';
+export { default as MemePostPage } from './memePostpage';
