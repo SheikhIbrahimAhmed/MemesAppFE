@@ -1,0 +1,81 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* .bg-form-gradient {
+  @apply bg-gradient-to-r from-blue-200 to-indigo-500;
+}*/
+
+.bg-custom {
+  background-image: url('../src/assets/images/background1.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+.bg-custom-color {
+  background-color: #5C9EAD;
+
+
+}
+
+.bg-chat-color {
+  background-color: #87CEEB;
+}
+
+.nav-bg {
+  background-color: #267080;
+}
+
+.hover\:nav-hover:hover {
+  background-color: #E5E5E5;
+}
+
+.hover\:nav-hovertext:hover {
+  color: #585555;
+}
+
+.icon-Gray {
+  color: rgb(116, 103, 103) !important;
+}
