@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleXmark, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 const DropDown = ({ selectedTags, handleTagSelection }) => {
     const [isOpen, setIsOpen] = useState(false);
 
@@ -12,18 +12,18 @@ const DropDown = ({ selectedTags, handleTagSelection }) => {
         console.error("selectedTags is not an array!", selectedTags);
     }
 
-    const tags = ["Dashboard", "Settings", "Earnings", "Sign out"];
+    const tags = ["Funny memes", "Work memes", "Trending Memes", "Viral Memes"];
 
     return (
         <div className="relative inline-block">
 
             <div className="w-full mb-2 border border-gray-300 rounded-lg px-3 py-2 text-gray-800 focus:outline-none focus:ring focus:ring-blue-300">
 
-                <div className="flex flex-wrap gap-2">
+                <div className="w-full flex flex-wrap gap-2">
                     {selectedTags.map((tag, index) => (
                         <span
                             key={index}
-                            className="bg-blue-500 text-white px-3 py-1 rounded-full text-sm flex items-center"
+                            className="bg-black50  text-white px-3 py-1 rounded-full text-sm flex items-center"
                         >
                             {tag}
                             <button
@@ -40,7 +40,7 @@ const DropDown = ({ selectedTags, handleTagSelection }) => {
 
             <button
                 onClick={toggleDropdown}
-                className="bg-blue-500 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                className="bg-black70  text-white  hover:bg-black30 hover:text-black focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                 type="button"
             >
                 Select Tags

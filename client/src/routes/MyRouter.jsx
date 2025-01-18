@@ -1,23 +1,15 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import PublicLayoutRoutes from "./PublicLayoutRoutes";
-import { Signup, Login, ShowMemes, ShowMyMemes, MemePostPage } from '../pages';
-import PrivateLayoutRoutes from "./PrivateLayoutRoutes";
-
+import { ShowMemes, MemePostPage } from '../pages';
+import Navbar from "../components/navbar"
 
 const MyRouter = () => {
     return (
         <Router>
+            <Navbar />
             <Routes>
-                <Route element={<PublicLayoutRoutes />}>
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/signup" element={<Signup />} />
-                </Route>
-                <Route element={<PrivateLayoutRoutes />}>
-                    <Route path="/post-meme" element={<MemePostPage />} />
-                    <Route path="/show-memes" element={<ShowMemes />} />
-                    <Route path="/show-my-memes" element={<ShowMyMemes />} />
-                </Route>
+                <Route path="/" element={<ShowMemes />} />
+                <Route path="/post-meme" element={<MemePostPage />} />
             </Routes>
         </Router>
     );

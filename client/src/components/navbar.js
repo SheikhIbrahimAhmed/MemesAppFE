@@ -1,15 +1,10 @@
-import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
+import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuItems } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
-import { backendUrl } from '../shared/constants/constant';
 import { useNavigate } from 'react-router-dom';
-import image1 from '../assets/images/logo.webp'
-import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faXmark } from '@fortawesome/free-solid-svg-icons';
 const navigation = [
-    { name: 'Home', href: '/show-memes', current: true },
+    { name: 'Home', href: '/', current: true },
     { name: 'Upload Meme', href: '/post-meme', current: false },
-    { name: 'My Memes', href: '/show-my-memes', current: false },
 ];
 
 function classNames(...classes) {
@@ -17,24 +12,16 @@ function classNames(...classes) {
 }
 
 export default function Navbar() {
-    const [isProfileVisible, setIsProfileVisible] = useState(false);
     const navigate = useNavigate()
-    const user = JSON.parse(localStorage.getItem("user"));
-    const profileImageUrl = `${backendUrl}${user?.profileImage}`;
-    const handleSignOut = () => {
-        localStorage.clear();
-        navigate("/login")
-    }
-    const toggleUserProfile = () => {
-        setIsProfileVisible(!isProfileVisible);
-    };
+
+
     return (
-        <Disclosure as="nav" className="bg-custom-color">
+        <Disclosure as="nav" className="bg-black90 border-b border-black50">
             <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 ">
                 <div className="relative flex h-16 items-center justify-between">
                     <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
 
-                        <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                        <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-black90 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
                             <span className="absolute -inset-0.5" />
                             <span className="sr-only">Open main menu</span>
                             <Bars3Icon aria-hidden="true" className="block size-6 group-data-[open]:hidden" />
@@ -43,11 +30,11 @@ export default function Navbar() {
                     </div>
                     <div className="flex flex-1 ml-16 sm:items-stretch sm:justify-start shrink-0">
                         <div className="flex shrink-0 items-center">
-                            <img
+                            {/* <img
                                 alt="Company Logo"
                                 src={image1}
                                 className="h-10 w-auto object-contain rounded-md shadow-md"
-                            />
+                            /> */}
                         </div>
                         <div className="hidden sm:ml-6 sm:block">
                             <div className="flex space-x-4">
@@ -57,7 +44,7 @@ export default function Navbar() {
                                         href={item.href}
                                         aria-current={item.current ? 'page' : undefined}
                                         className={classNames(
-                                            item.current ? 'nav-bg text-white' : 'text-white hover:nav-hover hover:nav-hovertext',
+                                            item.current ? ' text-black10  bg-black80 bg-opacity-25 hover:text-black05' : 'text-black30  hover:text-black20',
                                             'rounded-md px-3 py-2 text-sm font-medium',
                                         )}
                                     >
@@ -72,45 +59,11 @@ export default function Navbar() {
 
 
                         <Menu as="div" className="relative ml-3">
-                            <div>
-                                <MenuButton className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-                                    <span className="absolute -inset-1.5" />
-                                    <span className="sr-only">Open user menu</span>
-                                    <img
-                                        src={profileImageUrl}
-                                        alt={`${user?.name}'s Profile`}
-                                        className="size-8 rounded-full"
-                                    />
-                                </MenuButton>
-                            </div>
+
                             <MenuItems
                                 transition
                                 className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black/5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
                             >
-                                <MenuItem>
-                                    <button
-                                        onClick={toggleUserProfile}
-                                        className="block w-full px-4 py-2 text-left text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-none"
-                                    >
-                                        User Profile
-                                    </button>
-                                </MenuItem>
-                                <MenuItem>
-                                    <a
-                                        href="#"
-                                        className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-none"
-                                    >
-                                        Settings
-                                    </a>
-                                </MenuItem>
-                                <MenuItem >
-                                    <button
-                                        onClick={handleSignOut}
-                                        className="block w-full px-4 py-2 text-left text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-none"
-                                    >
-                                        Sign out
-                                    </button>
-                                </MenuItem>
                             </MenuItems>
                         </Menu>
                     </div>
@@ -126,7 +79,7 @@ export default function Navbar() {
                             href={item.href}
                             aria-current={item.current ? 'page' : undefined}
                             className={classNames(
-                                item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                                item.current ? 'bg-black60 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                                 'block rounded-md px-3 py-2 text-base font-medium',
                             )}
                         >
@@ -135,23 +88,7 @@ export default function Navbar() {
                     ))}
                 </div>
             </DisclosurePanel>
-            {isProfileVisible && (
-                <div className="absolute right-0 top-16 mt-4 mr-4 p-4 bg-white shadow-lg rounded-lg w-80">
-                    <div className='flex justify-end'>
-                        <FontAwesomeIcon icon={faXmark} onClick={toggleUserProfile}
-                            className='text-black-600 hover:text-red-800  w-5 h-5 cursor-pointer transition duration-200 ease-in-out' />
-                    </div>
-                    <div className="text-center">
-                        <img
-                            src={profileImageUrl}
-                            alt={`${user?.name}'s Profile`}
-                            className="w-20 h-20  mx-auto mb-4"
-                        />
-                        <h3 className="text-lg font-semibold">{user?.name}</h3>
-                        <p className="text-gray-500">{user?.email}</p>
-                    </div>
-                </div>
-            )}
+
         </Disclosure>
     )
 }

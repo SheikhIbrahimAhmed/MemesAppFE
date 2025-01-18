@@ -28,8 +28,8 @@ const MemePostPage = () => {
         e.preventDefault();
 
         if (!uploadedFilePath) {
-            toast.error("Please upload a meme image first.");
-            return;
+            // toast.error("Please upload a meme image first.");
+            // return;
         }
         if (!user || !user?._id) {
             toast.error("User data not found in local storage!");
@@ -67,6 +67,11 @@ const MemePostPage = () => {
     };
 
     const handleImageUpload = async (e) => {
+
+        if (uploadedFilePath) {
+            toast.error("You can post only one meme at a time")
+            return;
+        }
         const fileInput = e.target.form.querySelector('input[name="memeImage"]');
         const file = fileInput.files[0];
         const formData = new FormData();
@@ -94,18 +99,18 @@ const MemePostPage = () => {
         }
     };
     const handleImageChange = (event) => {
+        if (uploadedFilePath) {
+            return;
+        }
         const file = event.target.files[0];
         const imageUrl = URL.createObjectURL(file);
         setSelectedImage(imageUrl);
     };
     return (
-        <div className="flex items-center justify-center min-h-screen bg-custom">
-            <div className="p-6 rounded-lg shadow-md w-1/2 max-w-md bg-softCream">
-                <h1 className="text-2xl font-bold mb-4 text-gray-600">Post a Meme</h1>
+        <div className="flex items-center justify-center min-h-screen bg-black90">
+            <div className="p-6 rounded-lg shadow-md w-1/2 max-w-md bg-black80">
+                <h1 className="text-2xl font-bold mb-4 text-black30">Post a Meme</h1>
                 <form onSubmit={handleSubmit} className="space-y-4">
-                    <div>
-                        <DropDown handleTagSelection={handleTagSelection} selectedTags={selectedTags} />
-                    </div>
                     <div className="flex">
                         <form
                             method="POST"
@@ -114,7 +119,7 @@ const MemePostPage = () => {
                         >
                             <label
                                 htmlFor="memeImage"
-                                className="block text-sm font-medium  text-gray-600"
+                                className="block text-sm font-medium text-black30"
                             >
                                 Upload Image
                             </label>
@@ -132,7 +137,7 @@ const MemePostPage = () => {
 
                                 <label
                                     htmlFor="memeImage"
-                                    className="bg-skyBlue hover:bg-hoverSkyBlue hover:text-hovertext text-white font-semibold py-2 px-4 rounded cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                                    className="bg-black70 text-white  hover:bg-black30 hover:text-black font-semibold py-2 px-4 rounded cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                                 >
                                     <FontAwesomeIcon icon={faUpload} className="mr-2" />
                                     Upload
@@ -144,13 +149,13 @@ const MemePostPage = () => {
                         <div>
                             <button
                                 onClick={() => {
-                                    URL.revokeObjectURL(selectedImage); // Cleanup the object URL
+                                    URL.revokeObjectURL(selectedImage);
                                     setSelectedImage(null);
                                     setUploadedFilePath('')
                                 }}
                                 className="bg-red-800  px-3 py-1 rounded-lg"
                             >
-                                <FontAwesomeIcon icon={faCircleXmark} className="hover:text-skyBlue" />
+                                <FontAwesomeIcon icon={faCircleXmark} className="text-black10 hover:text-black30" />
                             </button>
                             <img src={selectedImage} alt="Uploaded" className="max-w-full h-auto" />
                             <button
@@ -164,11 +169,12 @@ const MemePostPage = () => {
                             </button>
                         </div>
                     )}
+                    <DropDown handleTagSelection={handleTagSelection} selectedTags={selectedTags} />
 
 
                     <button
                         type="submit"
-                        className="w-full bg-skyBlue hover:bg-hoverSkyBlue hover:text-hovertext font-semibold text-white rounded-lg px-4 py-2 transition duration-200"
+                        className="w-full bg-black90 bg-opacity-50 text-black30  hover:bg-black70 hover:text-black90 font-bold  rounded-lg px-4 py-2 transition duration-200"
                     >
                         Post
                     </button>

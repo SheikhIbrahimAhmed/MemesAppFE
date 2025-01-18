@@ -4,9 +4,8 @@ import MemeGallery from '../components/memeGallery';
 const ShowMemes = () => {
 
     return (
-        <div>
-            <MemeGallery
-            />
+        <div className="bg-black90">
+            <MemeGallery />
         </div>
     );
 };
