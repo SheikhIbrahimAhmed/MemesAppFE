@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUpload, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 import axios from "axios";
 import toast from "react-hot-toast";
-import DropDown from "../components/tagsDropDown/dropDown";
 
 
 const MemePostPage = () => {
@@ -16,20 +15,34 @@ const MemePostPage = () => {
 
 
 
-    const handleTagSelection = (tag) => {
-        if (selectedTags.includes(tag)) {
-            setSelectedTags(selectedTags.filter((t) => t !== tag));
-        } else {
-            setSelectedTags([...selectedTags, tag]);
+    const validateTags = (selectedTags) => {
+
+        const tagsArray = selectedTags
+            .split(',')
+            .map(tag => tag.trim())
+            .filter(tag => tag);
+        const uniqueTags = [...new Set(tagsArray)];
+        if (uniqueTags.length !== tagsArray.length) {
+            return { isValid: false, error: "Tags must not contain duplicates." };
         }
+        if (uniqueTags.length > 6) {
+            return { isValid: false, error: "You can add up to 6 unique tags only." };
+        }
+
+        return { isValid: true, tags: uniqueTags };
     };
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+        const { isValid, tags, error } = validateTags(selectedTags);
+        if (!isValid) {
+            toast.error(error);
+            return;
+        }
         if (!uploadedFilePath) {
-            // toast.error("Please upload a meme image first.");
-            // return;
+            toast.error("Please upload a meme image first.");
+            return;
         }
         if (!user || !user?._id) {
             toast.error("User data not found in local storage!");
@@ -57,6 +70,7 @@ const MemePostPage = () => {
                 toast.success("Meme Posted Successfully!");
                 setUploadedFilePath('')
                 setSelectedImage(null)
+                setSelectedTags('')
             } else {
                 toast.error(data.error || "Failed to create post");
             }
@@ -108,73 +122,71 @@ const MemePostPage = () => {
     };
     return (
         <div className="flex items-center justify-center min-h-screen bg-black90">
-            <div className="p-6 rounded-lg shadow-md w-1/2 max-w-md bg-black80">
-                <h1 className="text-2xl font-bold mb-4 text-black30">Post a Meme</h1>
+            <div className="p-6 rounded-lg shadow-lg w-full max-w-md bg-black80">
+                <h1 className="text-2xl font-bold mb-4 text-black05">Post a Meme</h1>
                 <form onSubmit={handleSubmit} className="space-y-4">
-                    <div className="flex">
-                        <form
-                            method="POST"
-                            encType="multipart/form-data"
-                            className="flex flex-col items-start gap-4"
+                    <div className="flex flex-col gap-4">
+                        <label
+                            htmlFor="memeImage"
+                            className="block text-sm font-medium text-black30"
                         >
+                            Upload Image
+                        </label>
+                        <div className="relative">
+                            <input
+                                type="file"
+                                name="memeImage"
+                                id="memeImage"
+                                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                                onChange={(e) => {
+                                    handleImageUpload(e);
+                                    handleImageChange(e);
+                                }}
+                            />
                             <label
                                 htmlFor="memeImage"
-                                className="block text-sm font-medium text-black30"
+                                className="bg-black70 text-black10 hover:bg-black30 hover:text-black90 font-semibold py-2 px-4 rounded cursor-pointer focus:outline-none focus:ring-2 focus:ring-black50 focus:ring-offset-2"
                             >
-                                Upload Image
+                                <FontAwesomeIcon icon={faUpload} className="mr-2" />
+                                Upload
                             </label>
-                            <div className="relative">
-
-                                <input
-                                    type="file"
-                                    name="memeImage"
-                                    id="memeImage"
-                                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                                    onChange={(e) => {
-                                        handleImageUpload(e);
-                                        handleImageChange(e);
-                                    }} />
-
-                                <label
-                                    htmlFor="memeImage"
-                                    className="bg-black70 text-white  hover:bg-black30 hover:text-black font-semibold py-2 px-4 rounded cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                                >
-                                    <FontAwesomeIcon icon={faUpload} className="mr-2" />
-                                    Upload
-                                </label>
-                            </div>
-                        </form>
+                        </div>
                     </div>
                     {selectedImage && (
-                        <div>
+                        <div className="flex flex-col items-start ">
                             <button
                                 onClick={() => {
                                     URL.revokeObjectURL(selectedImage);
                                     setSelectedImage(null);
-                                    setUploadedFilePath('')
+                                    setUploadedFilePath('');
                                 }}
-                                className="bg-red-800  px-3 py-1 rounded-lg"
+                                className="bg-red-700 text-black05 hover:bg-red-600 hover:text-black90  py-1 rounded-lg"
                             >
-                                <FontAwesomeIcon icon={faCircleXmark} className="text-black10 hover:text-black30" />
+                                <FontAwesomeIcon
+                                    icon={faCircleXmark}
+                                    className="text-black10 hover:text-black30"
+                                />
+
                             </button>
-                            <img src={selectedImage} alt="Uploaded" className="max-w-full h-auto" />
-                            <button
-                                onClick={() => {
-                                    URL.revokeObjectURL(selectedImage);
-                                    setSelectedImage(null);
-                                    setUploadedFilePath('')
-                                }}
-                                className=""
-                            >
-                            </button>
+                            <img
+                                src={selectedImage}
+                                alt="Uploaded"
+                                className="max-w-40 h-40  border border-black30 rounded-lg"
+                            />
+
                         </div>
                     )}
-                    <DropDown handleTagSelection={handleTagSelection} selectedTags={selectedTags} />
-
-
+                    <input
+                        id="tags"
+                        value={selectedTags}
+                        onChange={(e) => setSelectedTags(e.target.value)}
+                        placeholder="Add tags to your meme"
+                        className="bg-black10 text-black90 w-full border border-black30 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring focus:ring-black50 placeholder-black60"
+                        required
+                    />
                     <button
                         type="submit"
-                        className="w-full bg-black90 bg-opacity-50 text-black30  hover:bg-black70 hover:text-black90 font-bold  rounded-lg px-4 py-2 transition duration-200"
+                        className="w-full bg-black70 text-black10 hover:bg-black50 hover:text-black90 font-bold rounded-lg px-4 py-2 transition duration-200"
                     >
                         Post
                     </button>
@@ -182,6 +194,7 @@ const MemePostPage = () => {
             </div>
         </div>
     );
+
 };
 
 export default MemePostPage;

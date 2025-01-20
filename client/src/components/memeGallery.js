@@ -1,129 +1,83 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import "../css/memeGallery.css"
+import "../css/memeGallery.css";
 import toast from 'react-hot-toast';
-const MemeGallery = ({ customMemes, userId }) => {
+
+const MemeGallery = ({ customMemes }) => {
     const [memes, setMemes] = useState(customMemes || []);
     const [loading, setLoading] = useState(true);
-    const [selectedTags, setSelectedTags] = useState([]);
+    const [searchedText, setSearchedText] = useState('');
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
 
     const token = localStorage.getItem("token");
-    const tags = [
-        "All categories",
-        "Work memes",
-        "Funny memes",
-        "Relatable Memes",
-        "Trending Memes",
-        "Meme Compilation",
-        "Funny Pictures",
-        "Laugh Out Loud",
-        "Viral Memes",
-        "Meme Faces",
-        "Meme Culture",
-        "Reaction Memes",
-        "Satirical Memes",
-        "Internet Memes",
-        "Random Memes",
-        "Humor Memes",
-        "Meme Format",
-        "Meme Templates",
-        "Dark Humor Memes",
-        "Wholesome Memes",
-        "Work Memes",
-        "Pet Memes",
-        "School Memes",
-        "Tech Memes",
-        "Political Memes"
-    ];
+
+    const fetchMemes = async ({ page = 1, limit = 9, tags = '' }) => {
+        console.log("fetchMemes Called");
+        try {
+            const skip = (page - 1) * limit;
+            const url = `http://localhost:5000/api/post/get-memes`;
+            const response = await axios.get(url, {
+                params: { skip, limit, tags },
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            const memesData = response.data.memes;
+            setMemes(memesData);
+            setTotalPages(response.data.totalPages);
+            console.log("total pages", response.data.totalPages);
+        } catch (error) {
+            console.error("Error fetching memes:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
         if (!customMemes) {
-            const fetchMemes = async () => {
-                try {
-                    const url = userId
-                        ? `http://localhost:5000/api/post/get-memes?userId=${userId}`
-                        : `http://localhost:5000/api/post/get-memes`;
-
-                    const response = await axios.get(url, {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
-                    });
-
-                    setMemes(response.data);
-                } catch (error) {
-                    console.error("Error fetching memes:", error);
-                } finally {
-                    setLoading(false);
-                }
-            };
-
-            fetchMemes();
+            fetchMemes({ page });
         }
-    }, [customMemes, token, userId]);
+    }, [customMemes, page]);
 
-    const handleTagClick = (tag) => {
-        setSelectedTags((prevTags) => {
-            const updatedTags = prevTags.includes(tag)
-                ? prevTags.filter((item) => item !== tag)
-                : [...prevTags, tag];
-            handleMemeSearch(updatedTags);
-            return updatedTags;
-        });
+    const nextPage = () => {
+        if (page < totalPages) {
+            setPage(page + 1);
+            fetchMemes({ page: page + 1, tags: searchedText });
+        }
     };
-    const handleMemeSearch = async (tags) => {
 
-        try {
-            const response = await axios.get(
-                `http://localhost:5000/api/post/get-memes`,
-                {
-                    params: { tags },
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            );
-            const memesData = response.data;
-            setMemes(memesData);
-
-        } catch (error) {
-            console.error("Error searching for the post by caption:", error);
-            throw error;
+    const prevPage = () => {
+        if (page > 1) {
+            setPage(page - 1);
+            fetchMemes({ page: page - 1, tags: searchedText });
         }
     };
 
     return (
-        <div className=" flex items-center justify-center min-h-screen">
+        <div className="flex flex-col items-center justify-center min-h-screen">
+            <div className="w-full max-w-md mt-8">
+                <input
+                    type="text"
+                    placeholder="Search memes by tags like funny, work"
+                    value={searchedText}
+                    onChange={(e) => {
+                        const value = e.target.value;
+                        setSearchedText(value);
+                        fetchMemes({ page: 1, tags: value });
+                    }}
+                    className="bg-black10 text-black90 w-full border border-black30 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring focus:ring-black50 placeholder-black60"
+                />
+            </div>
             <div className="w-full max-w-5xl p-4">
-                <div className="flex items-center justify-start py-4 md:py-8 overflow-x-auto space-x-3 custom-scrollbar">
-                    {tags.map((tag, index) => (
-                        <button
-                            key={index}
-                            type="button"
-                            className={`tag-button text-black10 border font-medium rounded-3xl text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none focus:ring-4 ${selectedTags.includes(tag)
-                                ? 'bg-black70 text-black30 border-black'
-                                : 'bg-black80 border-black60 hover:bg-black30 hover:text-black focus:ring-gray-100 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700'
-                                }`}
-                            onClick={() => {
-                                handleTagClick(tag);
-                                handleMemeSearch();
-                            }}
-                        >
-                            {tag}
-                        </button>
-                    ))}
-
-                </div>
-
-
-
                 <div className="mt-4">
                     {memes.length > 0 ? (
                         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                             {memes.map((meme, index) => (
                                 <div key={index}>
                                     <img
-                                        className="h-auto max-w-full rounded-lg"
+                                        className="h-80 w-80 rounded-lg"
                                         src={meme.image}
                                         alt={meme.caption || `Meme ${index + 1}`}
                                     />
@@ -136,10 +90,30 @@ const MemeGallery = ({ customMemes, userId }) => {
                         </div>
                     )}
                 </div>
-
             </div>
-        </div >
+            <div className="flex items-center justify-center gap-x-6 mt-6">
+                <button
+                    className="bg-black80 text-black10 px-4 py-2 rounded-lg hover:bg-black70 transition-all duration-300 focus:outline-none"
+                    onClick={prevPage}
+                >
+                    Previous
+                </button>
+                <span className="text-black50 font-medium text-sm">
+                    Page <span className="text-black10">{page}</span> of{" "}
+                    <span className="text-black10">{totalPages}</span>
+                </span>
+                <button
+                    className="bg-black80 text-black10 px-4 py-2 rounded-lg hover:bg-black70 transition-all duration-300 focus:outline-none"
+                    onClick={nextPage}
+                >
+                    Next
+                </button>
+            </div>
+
+        </div>
     );
 };
 
 export default MemeGallery;
+
+
