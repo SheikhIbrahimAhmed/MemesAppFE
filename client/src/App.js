@@ -5,7 +5,7 @@ import MyRouter from './routes/MyRouter';
 function App() {
   return (
     <>
-      <div className="backgroundImage">
+      <div className="bg-darkBlue">
         <MyRouter />
         <Toaster />
       </div>

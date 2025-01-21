@@ -1,6 +1,6 @@
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuItems } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 const navigation = [
     { name: 'Home', href: '/', current: true },
     { name: 'Upload Meme', href: '/post-meme', current: false },
@@ -11,11 +11,12 @@ function classNames(...classes) {
 }
 
 export default function Navbar() {
+    const location = useLocation();
     const navigate = useNavigate()
 
 
     return (
-        <Disclosure as="nav" className="bg-black border-b border-black50">
+        <Disclosure as="nav" className="bg-black border-b border-lightBeige">
             <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
                 <div className="relative flex h-16 items-center justify-between">
                     {/* Mobile menu button */}
@@ -33,21 +34,24 @@ export default function Navbar() {
                         <div className="flex shrink-0 items-center"></div>
                         <div className="hidden sm:ml-6 sm:block">
                             <div className="flex space-x-4">
-                                {navigation.map((item) => (
-                                    <a
-                                        key={item.name}
-                                        href={item.href}
-                                        aria-current={item.current ? "page" : undefined}
-                                        className={classNames(
-                                            item.current
-                                                ? "text-lightBeige border hover:text-lightGray"
-                                                : "text-lightBeige hover:text-black20",
-                                            "rounded-md px-3 py-2 text-sm font-medium"
-                                        )}
-                                    >
-                                        {item.name}
-                                    </a>
-                                ))}
+                                {navigation.map((item) => {
+                                    const isCurrent = location.pathname === item.href; // Dynamically check if the route matches
+                                    return (
+                                        <a
+                                            key={item.name}
+                                            href={item.href}
+                                            aria-current={isCurrent ? 'page' : undefined}
+                                            className={classNames(
+                                                isCurrent
+                                                    ? 'text-lightBeige border border-lightBeige hover:text-softWhite'
+                                                    : 'text-lightBeige  hover:text-softWhite',
+                                                'rounded-md px-3 py-2 text-sm font-medium'
+                                            )}
+                                        >
+                                            {item.name}
+                                        </a>
+                                    );
+                                })}
                             </div>
                         </div>
                     </div>

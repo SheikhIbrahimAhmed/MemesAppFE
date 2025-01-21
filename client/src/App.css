@@ -49,7 +49,7 @@
 }*/
 
 .bg-custom {
-  background-image: url('../src/assets/images/background1.jpg');
+  background-image: url('../src/assets/images/backgroundimage.jpg');
   background-size: cover;
   background-position: center;
 }

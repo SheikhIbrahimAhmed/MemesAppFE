@@ -10,18 +10,16 @@ const MemeGallery = ({ customMemes }) => {
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
 
-    const token = localStorage.getItem("token");
+
 
     const fetchMemes = async ({ page = 1, limit = 9, tags = '' }) => {
         console.log("fetchMemes Called");
         try {
             const skip = (page - 1) * limit;
-            const url = `http://localhost:5000/api/post/get-memes`;
+            const url = `https://memes-app-be.vercel.app/api/post/get-memes`;
             const response = await axios.get(url, {
                 params: { skip, limit, tags },
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
+
             });
 
             const memesData = response.data.memes;
@@ -86,29 +84,36 @@ const MemeGallery = ({ customMemes }) => {
                         </div>
                     ) : (
                         <div className="flex justify-center items-center h-96">
-                            <p className="text-black30">No memes found</p>
+                            <p className="text-lightBeige">No memes found</p>
                         </div>
                     )}
                 </div>
             </div>
-            <div className="flex items-center justify-center gap-x-6 mt-6">
+            <div className="flex items-center mb-4 justify-center gap-x-6  bg-lightSky bg-opacity-40 p-4 rounded-lg shadow-md">
+
                 <button
-                    className="bg-black80 text-black10 px-4 py-2 rounded-lg hover:bg-black70 transition-all duration-300 focus:outline-none"
+                    className="bg-darkBlue text-softWhite bg-opacity-80 hover:bg-darkBlue hover:text-softWhite   px-4 py-2 rounded-lg  transition-all duration-300 focus:outline-none font-semibold"
                     onClick={prevPage}
                 >
                     Previous
                 </button>
-                <span className="text-black50 font-medium text-sm">
-                    Page <span className="text-black10">{page}</span> of{" "}
-                    <span className="text-black10">{totalPages}</span>
+
+
+                <span className="text-darkBlue font-medium text-sm">
+                    Page{" "}
+                    <span className="text-darkBlue font-bold">{page}</span> of{" "}
+                    <span className="text-darkBlue font-bold">{totalPages}</span>
                 </span>
+
+
                 <button
-                    className="bg-black80 text-black10 px-4 py-2 rounded-lg hover:bg-black70 transition-all duration-300 focus:outline-none"
+                    className="bg-darkBlue text-softWhite bg-opacity-80 hover:bg-darkBlue hover:text-softWhite   px-4 py-2 rounded-lg  transition-all duration-300 focus:outline-none font-semibold"
                     onClick={nextPage}
                 >
                     Next
                 </button>
             </div>
+
 
         </div>
     );

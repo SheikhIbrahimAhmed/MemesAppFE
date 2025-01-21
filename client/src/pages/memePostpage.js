@@ -10,8 +10,7 @@ const MemePostPage = () => {
     const [uploadedFilePath, setUploadedFilePath] = useState('');
     const [selectedImage, setSelectedImage] = useState(null);
     const [selectedTags, setSelectedTags] = useState([]);
-    const user = JSON.parse(localStorage.getItem("user"));
-    const token = localStorage.getItem("token")
+
 
 
 
@@ -44,23 +43,18 @@ const MemePostPage = () => {
             toast.error("Please upload a meme image first.");
             return;
         }
-        if (!user || !user?._id) {
-            toast.error("User data not found in local storage!");
-            return;
-        }
+
 
         const postData = {
-            userId: user?._id,
             tags: selectedTags,
             image: uploadedFilePath
 
         };
         try {
-            const response = await fetch("http://localhost:5000/api/post/create-post", {
+            const response = await fetch("https://memes-app-be.vercel.app/api/post/create-post", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`
                 },
                 body: JSON.stringify(postData),
             });
@@ -72,11 +66,11 @@ const MemePostPage = () => {
                 setSelectedImage(null)
                 setSelectedTags('')
             } else {
-                toast.error(data.error || "Failed to create post");
+                toast.error(data.error || "Failed to post meme");
             }
         } catch (error) {
-            console.error("Error creating post:", error);
-            toast.error("An error occurred while creating the post.");
+            console.error("Error posting meme:", error);
+            toast.error("An error occurred while posting the meme.");
         }
     };
 
@@ -93,10 +87,9 @@ const MemePostPage = () => {
 
 
         try {
-            const response = await axios.post("http://localhost:5000/api/upload/upload-image", formData, {
+            const response = await axios.post("https://memes-app-be.vercel.app/api/upload/upload-image", formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
-                    Authorization: `Bearer ${token}`,
                 },
             });
 
@@ -121,13 +114,14 @@ const MemePostPage = () => {
     };
     return (
         <div className="flex items-center justify-center min-h-screen">
-            <div className="p-6 rounded-lg shadow-lg w-full max-w-md bg-earthyBrown">
-                <h1 className="text-2xl font-bold mb-4 text-lightBeige">Post a Meme</h1>
+            <div className="p-6 rounded-lg shadow-lg w-full max-w-md bg-lightBrown">
+                <h1 className="text-2xl font-bold mb-4 text-softWhite">Post a Meme</h1>
+
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="flex flex-col gap-4 w-full">
                         <label
                             htmlFor="memeImage"
-                            className="w-full text-sm font-medium text-lightBeige"
+                            className="w-full text-sm font-medium text-softWhite"
                         >
                             Upload Image
                         </label>
