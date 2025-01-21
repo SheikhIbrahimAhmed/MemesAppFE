@@ -3,7 +3,7 @@ import MemeGallery from '../components/memeGallery';
 
 const ShowMemes = () => {
     return (
-        <div className="bg-black90 min-h-screen flex flex-col items-center justify-start">
+        <div className="bg-transparent min-h-screen flex flex-col items-center justify-start">
 
 
 

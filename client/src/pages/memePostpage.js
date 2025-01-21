@@ -103,7 +103,6 @@ const MemePostPage = () => {
             if (response.status === 200) {
                 console.log("response.data......", response.data)
                 setUploadedFilePath(response.data.imageUrl);
-                toast.success("Image uploaded successfully!");
             } else {
                 toast.error("Failed to upload images.");
             }
@@ -121,23 +120,23 @@ const MemePostPage = () => {
         setSelectedImage(imageUrl);
     };
     return (
-        <div className="flex items-center justify-center min-h-screen bg-black90">
-            <div className="p-6 rounded-lg shadow-lg w-full max-w-md bg-black80">
-                <h1 className="text-2xl font-bold mb-4 text-black05">Post a Meme</h1>
+        <div className="flex items-center justify-center min-h-screen">
+            <div className="p-6 rounded-lg shadow-lg w-full max-w-md bg-earthyBrown">
+                <h1 className="text-2xl font-bold mb-4 text-lightBeige">Post a Meme</h1>
                 <form onSubmit={handleSubmit} className="space-y-4">
-                    <div className="flex flex-col gap-4">
+                    <div className="flex flex-col gap-4 w-full">
                         <label
                             htmlFor="memeImage"
-                            className="block text-sm font-medium text-black30"
+                            className="w-full text-sm font-medium text-lightBeige"
                         >
                             Upload Image
                         </label>
-                        <div className="relative">
+                        <div className="w-full text-center bg-warmYellow text-darkBlue hover:bg-darkBlue hover:text-softWhite font-semibold rounded cursor-pointer focus:outline-none focus:ring-2 focus:ring-lightBeige focus:ring-offset-2">
                             <input
                                 type="file"
                                 name="memeImage"
                                 id="memeImage"
-                                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                                className="hidden inset-0 w-full h-full opacity-0 cursor-pointer"
                                 onChange={(e) => {
                                     handleImageUpload(e);
                                     handleImageChange(e);
@@ -145,48 +144,46 @@ const MemePostPage = () => {
                             />
                             <label
                                 htmlFor="memeImage"
-                                className="bg-black70 text-black10 hover:bg-black30 hover:text-black90 font-semibold py-2 px-4 rounded cursor-pointer focus:outline-none focus:ring-2 focus:ring-black50 focus:ring-offset-2"
+                                className="w-full flex justify-center items-center text-center py-2 px-4 cursor-pointer"
                             >
                                 <FontAwesomeIcon icon={faUpload} className="mr-2" />
-                                Upload
+                                <p>Upload</p>
                             </label>
                         </div>
                     </div>
                     {selectedImage && (
-                        <div className="flex flex-col items-start ">
+                        <div className="flex flex-col items-start">
                             <button
                                 onClick={() => {
                                     URL.revokeObjectURL(selectedImage);
                                     setSelectedImage(null);
                                     setUploadedFilePath('');
                                 }}
-                                className="bg-red-700 text-black05 hover:bg-red-600 hover:text-black90  py-1 rounded-lg"
+                                className="bg-red-700 text-softWhite hover:bg-red-600 py-1 rounded-lg"
                             >
                                 <FontAwesomeIcon
                                     icon={faCircleXmark}
-                                    className="text-black10 hover:text-black30"
+                                    className="text-softWhite hover:text-lightBeige"
                                 />
-
                             </button>
                             <img
                                 src={selectedImage}
                                 alt="Uploaded"
-                                className="max-w-40 h-40  border border-black30 rounded-lg"
+                                className="max-w-40 h-40 border border-lightBeige rounded-lg"
                             />
-
                         </div>
                     )}
                     <input
                         id="tags"
                         value={selectedTags}
                         onChange={(e) => setSelectedTags(e.target.value)}
-                        placeholder="Add tags to your meme"
-                        className="bg-black10 text-black90 w-full border border-black30 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring focus:ring-black50 placeholder-black60"
+                        placeholder="Add commas separated tags to your meme"
+                        className="bg-lightBeige text-darkBlue w-full rounded-md px-3 py-2 text-sm focus:outline-none focus:ring focus:ring-warmYellow placeholder-darkGray"
                         required
                     />
                     <button
                         type="submit"
-                        className="w-full bg-black70 text-black10 hover:bg-black50 hover:text-black90 font-bold rounded-lg px-4 py-2 transition duration-200"
+                        className="w-full bg-warmYellow text-darkBlue hover:bg-darkBlue hover:text-softWhite font-bold rounded-lg px-4 py-2 transition duration-200"
                     >
                         Post
                     </button>
@@ -194,6 +191,7 @@ const MemePostPage = () => {
             </div>
         </div>
     );
+
 
 };
 

@@ -11,3 +11,17 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.backgroundImage {
+  background-image: url('./assets/images/1e.jpg');
+  /* background-size: cover; */
+  background-position: center;
+  /* Centers the image */
+  /* background-repeat: no-repeat; */
+  /* Prevents the image from repeating */
+  /* Makes it cover the full viewport height */
+  width: 100%;
+  /* Makes it cover the full viewport width */
+  overflow: hidden;
+  /* Prevents any overflow */
+}

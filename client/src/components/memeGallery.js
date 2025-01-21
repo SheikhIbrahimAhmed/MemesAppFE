@@ -67,7 +67,7 @@ const MemeGallery = ({ customMemes }) => {
                         setSearchedText(value);
                         fetchMemes({ page: 1, tags: value });
                     }}
-                    className="bg-black10 text-black90 w-full border border-black30 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring focus:ring-black50 placeholder-black60"
+                    className="bg-black10 text-black w-full border border-black30 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring focus:ring-black50 placeholder-black60"
                 />
             </div>
             <div className="w-full max-w-5xl p-4">
