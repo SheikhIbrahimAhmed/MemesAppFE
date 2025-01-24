@@ -44,14 +44,13 @@ const MemePostPage = () => {
             return;
         }
 
-
         const postData = {
-            tags: selectedTags,
+            tags: selectedTags?.split(","),
             image: uploadedFilePath
 
         };
         try {
-            const response = await fetch("https://memes-app-be.vercel.app/api/post/create-post", {
+            const response = await fetch("http://localhost:5000/api/post/create-post", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -87,14 +86,13 @@ const MemePostPage = () => {
 
 
         try {
-            const response = await axios.post("https://memes-app-be.vercel.app/api/upload/upload-image", formData, {
+            const response = await axios.post("http://localhost:5000/api/upload/upload-image", formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },
             });
 
             if (response.status === 200) {
-                console.log("response.data......", response.data)
                 setUploadedFilePath(response.data.imageUrl);
             } else {
                 toast.error("Failed to upload images.");

@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
+import { debounce } from "lodash";
 import axios from 'axios';
 import "../css/memeGallery.css";
-import toast from 'react-hot-toast';
 
 const MemeGallery = ({ customMemes }) => {
     const [memes, setMemes] = useState(customMemes || []);
@@ -12,27 +12,32 @@ const MemeGallery = ({ customMemes }) => {
 
 
 
-    const fetchMemes = async ({ page = 1, limit = 9, tags = '' }) => {
-        console.log("fetchMemes Called");
-        try {
-            const skip = (page - 1) * limit;
-            const url = `https://memes-app-be.vercel.app/api/post/get-memes`;
-            const response = await axios.get(url, {
-                params: { skip, limit, tags },
+    const fetchMemes = debounce
+        (async ({ page = 1, limit = 9, tags = '' }) => {
+            try {
+                const skip = (page - 1) * limit;
+                const url = `http://localhost:5000/api/post/get-memes`;
+                const response = await axios.get(url, {
+                    params: { skip, limit, tags },
 
-            });
+                });
 
-            const memesData = response.data.memes;
-            setMemes(memesData);
-            setTotalPages(response.data.totalPages);
-            console.log("total pages", response.data.totalPages);
-        } catch (error) {
-            console.error("Error fetching memes:", error);
-        } finally {
-            setLoading(false);
-        }
+                const memesData = response.data.memes;
+                console.log("response.data.memes.tag", memesData)
+                setMemes(memesData);
+                setTotalPages(response.data.totalPages);
+            } catch (error) {
+                console.error("Error fetching memes:", error);
+            } finally {
+                setLoading(false);
+            }
+        }, 1000);
+
+    const handleInputChange = (e) => {
+        const value = e.target.value;
+        setSearchedText(value);
+        fetchMemes({ page: 1, tags: value });
     };
-
     useEffect(() => {
         if (!customMemes) {
             fetchMemes({ page });
@@ -54,17 +59,13 @@ const MemeGallery = ({ customMemes }) => {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen">
+        <div className="flex flex-col items-center justify-center h-fit">
             <div className="w-full max-w-md mt-8">
                 <input
                     type="text"
-                    placeholder="Search memes by tags like funny, work"
+                    placeholder="Enter comma separated tags"
                     value={searchedText}
-                    onChange={(e) => {
-                        const value = e.target.value;
-                        setSearchedText(value);
-                        fetchMemes({ page: 1, tags: value });
-                    }}
+                    onChange={handleInputChange}
                     className="bg-black10 text-black w-full border border-black30 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring focus:ring-black50 placeholder-black60"
                 />
             </div>
@@ -73,12 +74,22 @@ const MemeGallery = ({ customMemes }) => {
                     {memes.length > 0 ? (
                         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                             {memes.map((meme, index) => (
-                                <div key={index}>
+                                <div key={index} className="flex flex-col items-center">
                                     <img
                                         className="h-80 w-80 rounded-lg"
                                         src={meme.image}
                                         alt={meme.caption || `Meme ${index + 1}`}
                                     />
+                                    <div className="mt-2 flex flex-wrap justify-center gap-2">
+                                        {meme.tags && meme.tags.map((tag, tagIndex) => (
+                                            <span
+                                                key={tagIndex}
+                                                className="bg-lightBeige text-black py-1 px-3 rounded-full text-sm"
+                                            >
+                                                {tag}
+                                            </span>
+                                        ))}
+                                    </div>
                                 </div>
                             ))}
                         </div>
@@ -89,6 +100,7 @@ const MemeGallery = ({ customMemes }) => {
                     )}
                 </div>
             </div>
+
             <div className="flex items-center mb-4 justify-center gap-x-6  bg-lightSky bg-opacity-40 p-4 rounded-lg shadow-md">
 
                 <button
