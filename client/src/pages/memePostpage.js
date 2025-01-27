@@ -3,16 +3,20 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUpload, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 import axios from "axios";
 import toast from "react-hot-toast";
-
+import CategoryDropdown from '../components/CategoryDropdown'
 
 const MemePostPage = () => {
 
     const [uploadedFilePath, setUploadedFilePath] = useState('');
     const [selectedImage, setSelectedImage] = useState(null);
     const [selectedTags, setSelectedTags] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState('');
+    const categories = ['Funny', 'Work', 'Motivational', 'Relatable', 'Sarcastic', 'Wholesome'];
 
-
-
+    const handleCategorySelect = (category) => {
+        setSelectedCategory(category);
+        console.log("cat post page")
+    };
 
     const validateTags = (selectedTags) => {
 
@@ -46,24 +50,28 @@ const MemePostPage = () => {
 
         const postData = {
             tags: selectedTags?.split(","),
-            image: uploadedFilePath
-
+            category: selectedCategory,
+            image: uploadedFilePath,
         };
         try {
-            const response = await fetch("http://localhost:5000/api/post/create-post", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(postData),
-            });
+            const response = await axios.post(
+                `${process.env.REACT_APP_API_URL}/api/post/create-post`,
+                postData,
+                {
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                }
+            );
 
-            const data = await response.json();
-            if (response.ok) {
+            const data = await response.data;
+            console.log(data)
+            if (response.status === 201) {
                 toast.success("Meme Posted Successfully!");
                 setUploadedFilePath('')
                 setSelectedImage(null)
                 setSelectedTags('')
+                setSelectedCategory('')
             } else {
                 toast.error(data.error || "Failed to post meme");
             }
@@ -86,7 +94,7 @@ const MemePostPage = () => {
 
 
         try {
-            const response = await axios.post("http://localhost:5000/api/upload/upload-image", formData, {
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/upload/upload-image`, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },
@@ -112,7 +120,7 @@ const MemePostPage = () => {
     };
     return (
         <div className="flex items-center justify-center min-h-screen">
-            <div className="p-6 rounded-lg shadow-lg w-full max-w-md bg-lightBrown">
+            <div className="p-6 rounded-lg shadow-lg w-full max-w-md bg-lightBlue">
                 <h1 className="text-2xl font-bold mb-4 text-softWhite">Post a Meme</h1>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
@@ -123,7 +131,7 @@ const MemePostPage = () => {
                         >
                             Upload Image
                         </label>
-                        <div className="w-full text-center bg-warmYellow text-darkBlue hover:bg-darkBlue hover:text-softWhite font-semibold rounded cursor-pointer focus:outline-none focus:ring-2 focus:ring-lightBeige focus:ring-offset-2">
+                        <div className="w-full text-center bg-skyBlue text-darkBlue hover:bg-darkBlue hover:text-softWhite font-semibold rounded cursor-pointer focus:outline-none focus:ring-2 focus:ring-lightBeige focus:ring-offset-2">
                             <input
                                 type="file"
                                 name="memeImage"
@@ -165,17 +173,18 @@ const MemePostPage = () => {
                             />
                         </div>
                     )}
+                    <CategoryDropdown categories={categories} onSelect={handleCategorySelect} />
                     <input
                         id="tags"
                         value={selectedTags}
                         onChange={(e) => setSelectedTags(e.target.value)}
                         placeholder="Add commas separated tags to your meme"
-                        className="bg-lightBeige text-darkBlue w-full rounded-md px-3 py-2 text-sm focus:outline-none focus:ring focus:ring-warmYellow placeholder-darkGray"
+                        className="bg-skyBlue text-darkBlue w-full rounded-md px-3 py-2 text-sm focus:outline-none focus:ring focus:ring-skyBlue placeholder:text-darkBlue"
                         required
                     />
                     <button
                         type="submit"
-                        className="w-full bg-warmYellow text-darkBlue hover:bg-darkBlue hover:text-softWhite font-bold rounded-lg px-4 py-2 transition duration-200"
+                        className="w-full bg-skyBlue text-darkBlue hover:bg-darkBlue hover:text-softWhite font-bold rounded-lg px-4 py-2 transition duration-200"
                     >
                         Post
                     </button>

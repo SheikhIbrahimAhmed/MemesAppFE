@@ -7,6 +7,23 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  /* Decrease the width of the scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  background: linear-gradient(to bottom, #1E3A8A, #7EC2E7);
+  /* Gradient on the track */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1E3A8A;
+  /* Gradient on the thumb */
+  /* Optional: To add spacing around the thumb */
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;

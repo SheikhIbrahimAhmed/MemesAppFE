@@ -3,19 +3,16 @@ module.exports = {
   theme: {
     extend: {},
     colors: {
-      // Blue sky theme
-      skyBlue: '#87CEEB', // Primary sky blue
-      lightSky: '#ADD8E6', // Lighter sky blue
-      darkBlue: '#1E3A8A', // Dark blue for headings
-
-      // Brown bear theme
-      earthyBrown: '#A0522D', // Primary brown
-      lightBeige: '#F5DEB3', // Beige for highlights
+      skyBlue: '#87CEEB',
+      lightSky: '#ADD8E6',
+      darkBlue: '#1E3A8A',
+      lightBlue: '#2C4DA6',
+      earthyBrown: '#A0522D',
+      lightBeige: '#F5DEB3',
       lightBrown: '#B06538',
-      // Accents
-      warmYellow: '#FFD700', // Golden yellow for buttons and hover
-      softWhite: '#F5F5F5', // For form backgrounds
-      lightGray: '#D3D3D3', // For borders and subtle text
+      warmYellow: '#FFD700',
+      softWhite: '#F5F5F5',
+      lightGray: '#D3D3D3',
     },
   },
   plugins: [],

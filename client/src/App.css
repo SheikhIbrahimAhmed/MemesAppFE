@@ -49,9 +49,10 @@
 }*/
 
 .bg-custom {
-  background-image: url('../src/assets/images/backgroundimage.jpg');
+  background-image: url('../src/assets/images/bgImage.jpg');
   background-size: cover;
   background-position: center;
+
 }
 
 .bg-custom-color {
