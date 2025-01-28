@@ -1,6 +1,7 @@
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuItems } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 const navigation = [
     { name: 'Home', href: '/', current: true },
     { name: 'View Memes', href: '/view-memes', current: false },
@@ -34,11 +35,11 @@ export default function Navbar() {
                         <div className="hidden sm:ml-6 sm:block">
                             <div className="flex space-x-4">
                                 {navigation.map((item) => {
-                                    const isCurrent = location.pathname === item.href; // Dynamically check if the route matches
+                                    const isCurrent = location.pathname === item.href;
                                     return (
-                                        <a
+                                        <Link
                                             key={item.name}
-                                            href={item.href}
+                                            to={item.href}
                                             aria-current={isCurrent ? 'page' : undefined}
                                             className={classNames(
                                                 isCurrent
@@ -48,7 +49,7 @@ export default function Navbar() {
                                             )}
                                         >
                                             {item.name}
-                                        </a>
+                                        </Link>
                                     );
                                 })}
                             </div>

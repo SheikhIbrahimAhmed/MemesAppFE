@@ -15,7 +15,6 @@ const MemePostPage = () => {
 
     const handleCategorySelect = (category) => {
         setSelectedCategory(category);
-        console.log("cat post page")
     };
 
     const validateTags = (selectedTags) => {
@@ -38,6 +37,7 @@ const MemePostPage = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        console.log("HandleSubmit")
         const { isValid, tags, error } = validateTags(selectedTags);
         if (!isValid) {
             toast.error(error);
@@ -84,11 +84,16 @@ const MemePostPage = () => {
     const handleImageUpload = async (e) => {
 
         if (uploadedFilePath) {
-            toast.error("You can post only one meme at a time")
+            toast.error("You can post only one image at a time")
             return;
         }
         const fileInput = e.target.form.querySelector('input[name="memeImage"]');
         const file = fileInput.files[0];
+        const validFileTypes = ["image/jpeg", "image/png"];
+        if (!file || !validFileTypes.includes(file.type)) {
+            toast.error("Only JPG and PNG images are allowed.");
+            return;
+        }
         const formData = new FormData();
         formData.append('memeImage', file);
 
@@ -115,6 +120,10 @@ const MemePostPage = () => {
             return;
         }
         const file = event.target.files[0];
+        const validFileTypes = ["image/jpeg", "image/png"];
+        if (!file || !validFileTypes.includes(file.type)) {
+            return;
+        }
         const imageUrl = URL.createObjectURL(file);
         setSelectedImage(imageUrl);
     };

@@ -11,6 +11,7 @@ export default function CategoryDropdown({ categories, onSelect, bgColor = "skyB
     return (
         <div className="relative w-full">
             <button
+                type="button"
                 id="dropdown-button"
                 className={`w-full bg-${bgColor} border border-gray-300 text-${textColor} py-2 px-4 rounded-md shadow-sm flex justify-between items-center focus:outline-none whitespace-nowrap`}
                 onClick={(e) => {

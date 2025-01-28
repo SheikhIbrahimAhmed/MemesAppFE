@@ -3,6 +3,11 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import '@fontsource/inter/400.css'; // Regular
+import '@fontsource/inter/500.css'; // Medium
+import '@fontsource/inter/600.css'; // Semi-Bold
+import '@fontsource/inter/700.css'; // Bold
+import '@fontsource/inter/800.css'; // ExtraBold
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

@@ -1,8 +1,9 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import { debounce } from "lodash";
 import axios from 'axios';
 import "../css/memeGallery.css";
 import CategoryDropdown from './CategoryDropdown';
+
 const MemeGallery = ({ customMemes }) => {
     const [memes, setMemes] = useState(customMemes || []);
     const [loading, setLoading] = useState(true);
@@ -11,38 +12,38 @@ const MemeGallery = ({ customMemes }) => {
     const [totalPages, setTotalPages] = useState(1);
     const [selectedCategory, setSelectedCategory] = useState('');
 
-
     const categories = ['', 'Funny', 'Work', 'Motivational', 'Relatable', 'Sarcastic', 'Wholesome'];
 
     const handleCategorySelect = (category) => {
         setSelectedCategory(category);
         fetchMemes({ page: 1, tags: searchedText, category });
     };
-    const fetchMemes = debounce
-        (async ({ page = 1, limit = 9, tags = '', category = '' }) => {
-            try {
-                const skip = (page - 1) * limit;
-                const url = `${process.env.REACT_APP_API_URL}/api/post/get-memes`;
-                const response = await axios.get(url, {
-                    params: { skip, limit, tags, category },
 
-                });
+    const fetchMemes = debounce(async ({ page = 1, limit = 9, tags = '', category = '' }) => {
+        setLoading(true); // Set loading to true before starting the fetch
+        try {
+            const skip = (page - 1) * limit;
+            const url = `${process.env.REACT_APP_API_URL}/api/post/get-memes`;
+            const response = await axios.get(url, {
+                params: { skip, limit, tags, category },
+            });
 
-                const memesData = response.data.memes;
-                setMemes(memesData);
-                setTotalPages(response.data.totalPages);
-            } catch (error) {
-                console.error("Error fetching memes:", error);
-            } finally {
-                setLoading(false);
-            }
-        }, 1000);
+            const memesData = response.data.memes;
+            setMemes(memesData);
+            setTotalPages(response.data.totalPages);
+        } catch (error) {
+            console.error("Error fetching memes:", error);
+        } finally {
+            setLoading(false); // Set loading to false once fetch is complete
+        }
+    }, 1000);
 
     const handleInputChange = (e) => {
         const value = e.target.value;
         setSearchedText(value);
         fetchMemes({ page: 1, tags: value, category: selectedCategory });
     };
+
     useEffect(() => {
         if (!customMemes) {
             fetchMemes({ page });
@@ -65,6 +66,7 @@ const MemeGallery = ({ customMemes }) => {
 
     return (
         <div className="flex flex-col items-center justify-center h-fit">
+            {/* Search and Category Filter */}
             <div className="w-full max-w-lg mt-8 flex gap-4">
                 <input
                     type="text"
@@ -77,12 +79,18 @@ const MemeGallery = ({ customMemes }) => {
                     <CategoryDropdown categories={categories} onSelect={handleCategorySelect} bgColor='gray-100' textColor='gray-700' />
                 </div>
             </div>
+
+            {/* Memes or Loading */}
             <div className="w-full max-w-5xl p-4">
                 <div className="mt-4">
-                    {memes.length > 0 ? (
+                    {loading ? (
+                        <div className="flex justify-center items-center h-96">
+                            <p className="text-darkBlue font-sans font-bold">Loading...</p>
+                        </div>
+                    ) : memes.length > 0 ? (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
                             {memes.map((meme, index) => (
-                                <div key={index} className="flex flex-col items-center border  border-darkBlue  rounded-md p-3">
+                                <div key={index} className="flex flex-col items-center border border-darkBlue rounded-md p-3">
                                     <img
                                         className="h-80 w-80 rounded-lg"
                                         src={meme.image}
@@ -92,11 +100,10 @@ const MemeGallery = ({ customMemes }) => {
                                         {meme.tags && meme.tags.map((tag, tagIndex) => (
                                             <span
                                                 key={tagIndex}
-                                                className="px-3 py-1 rounded-full text-darkBlue bg-[#FFFFF7] bg-opacity-20 font-semibold text-sm  border border-lightBlue transition-transform transform hover:scale-105 hover:bg-opacity-40 hover:border-[#fff]"
+                                                className="px-3 py-1 rounded-full text-darkBlue bg-[#FFFFF7] bg-opacity-20 font-semibold text-sm border border-lightBlue transition-transform transform hover:scale-105 hover:bg-opacity-40 hover:border-[#fff]"
                                             >
                                                 {tag}
                                             </span>
-
                                         ))}
                                     </div>
                                 </div>
@@ -104,42 +111,34 @@ const MemeGallery = ({ customMemes }) => {
                         </div>
                     ) : (
                         <div className="flex justify-center items-center h-96">
-                            <p className="text-lightBeige">No memes found</p>
+                            <p className="text-darkBlue font-sans font-bold">No memes found</p>
                         </div>
                     )}
                 </div>
             </div>
 
-            <div className="flex items-center mb-4 justify-center gap-x-6  bg-lightSky bg-opacity-30 p-4 rounded-lg shadow-md">
-
+            {/* Pagination */}
+            <div className="flex items-center mb-4 justify-center gap-x-6 bg-lightSky bg-opacity-30 p-4 rounded-lg shadow-md">
                 <button
-                    className="bg-darkBlue text-softWhite bg-opacity-80 hover:bg-darkBlue hover:text-softWhite   px-4 py-2 rounded-lg  transition-all duration-300 focus:outline-none font-semibold"
+                    className="bg-darkBlue text-softWhite bg-opacity-80 hover:bg-darkBlue hover:text-softWhite px-4 py-2 rounded-lg transition-all duration-300 focus:outline-none font-semibold"
                     onClick={prevPage}
                 >
                     Previous
                 </button>
-
-
                 <span className="text-darkBlue font-medium text-sm">
                     Page{" "}
                     <span className="text-darkBlue font-bold">{page}</span> of{" "}
                     <span className="text-darkBlue font-bold">{totalPages}</span>
                 </span>
-
-
                 <button
-                    className="bg-darkBlue text-softWhite bg-opacity-80 hover:bg-darkBlue hover:text-softWhite   px-4 py-2 rounded-lg  transition-all duration-300 focus:outline-none font-semibold"
+                    className="bg-darkBlue text-softWhite bg-opacity-80 hover:bg-darkBlue hover:text-softWhite px-4 py-2 rounded-lg transition-all duration-300 focus:outline-none font-semibold"
                     onClick={nextPage}
                 >
                     Next
                 </button>
             </div>
-
-
         </div>
     );
 };
 
 export default MemeGallery;
-
-

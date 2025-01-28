@@ -51,8 +51,13 @@
 .bg-custom {
   background-image: url('../src/assets/images/bgImage.jpg');
   background-size: cover;
+  /* Ensures the image covers the entire area */
   background-position: center;
-
+  /* Keeps the image centered */
+  background-repeat: no-repeat;
+  /* Prevents the image from repeating */
+  background-attachment: fixed;
+  /* Keeps the background fixed in place */
 }
 
 .bg-custom-color {

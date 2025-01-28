@@ -14,6 +14,10 @@ module.exports = {
       softWhite: '#F5F5F5',
       lightGray: '#D3D3D3',
     },
+    fontFamily: {
+      sans: ['Inter', 'sans-serif'], // Default font
+      inter: ['Inter', 'sans-serif'], // Custom class
+    },
   },
   plugins: [],
 };
