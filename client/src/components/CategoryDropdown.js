@@ -13,7 +13,7 @@ export default function CategoryDropdown({ categories, onSelect, bgColor = "skyB
             <button
                 type="button"
                 id="dropdown-button"
-                className={`w-full bg-${bgColor} border border-gray-300 text-${textColor} py-2 px-4 rounded-md shadow-sm flex justify-between items-center focus:outline-none whitespace-nowrap`}
+                className={`w-full bg-${bgColor} border border-gray-300 text-${textColor} py-2 px-4 rounded-[10px] shadow-sm flex justify-between items-center focus:outline-none whitespace-nowrap`}
                 onClick={(e) => {
                     const dropdown = e.currentTarget.nextElementSibling;
                     dropdown.classList.toggle('hidden');
@@ -32,7 +32,7 @@ export default function CategoryDropdown({ categories, onSelect, bgColor = "skyB
             </button>
 
             <ul
-                className="absolute w-full mt-2 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto z-10 hidden"
+                className="absolute w-full mt-2 bg-[#fff]  rounded-[10px] max-h-[120px] shadow-lg overflow-y-auto z-20 hidden"
             >
                 {categories.map((category) => (
                     <li
@@ -41,7 +41,7 @@ export default function CategoryDropdown({ categories, onSelect, bgColor = "skyB
                             handleSelect(category);
                             document.getElementById('dropdown-button').nextElementSibling.classList.add('hidden');
                         }}
-                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                        className="px-4 py-2 hover:bg-softWhite cursor-pointer"
                     >
                         {category}
                     </li>

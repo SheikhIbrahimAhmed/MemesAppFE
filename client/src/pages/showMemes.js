@@ -1,5 +1,5 @@
 import React from 'react';
-import MemeGallery from '../components/memeGallery';
+import MemeGallery from '../components/MemeGallery';
 
 const ShowMemes = () => {
     return (

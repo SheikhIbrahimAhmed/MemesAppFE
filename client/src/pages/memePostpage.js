@@ -4,6 +4,7 @@ import { faUpload, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 import axios from "axios";
 import toast from "react-hot-toast";
 import CategoryDropdown from '../components/CategoryDropdown'
+import YouTubeSkeleton from "../components/Skeleton";
 
 const MemePostPage = () => {
 
@@ -11,6 +12,8 @@ const MemePostPage = () => {
     const [selectedImage, setSelectedImage] = useState(null);
     const [selectedTags, setSelectedTags] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState('');
+
+
     const categories = ['Funny', 'Work', 'Motivational', 'Relatable', 'Sarcastic', 'Wholesome'];
 
     const handleCategorySelect = (category) => {
@@ -37,7 +40,6 @@ const MemePostPage = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("HandleSubmit")
         const { isValid, tags, error } = validateTags(selectedTags);
         if (!isValid) {
             toast.error(error);
@@ -201,7 +203,6 @@ const MemePostPage = () => {
             </div>
         </div>
     );
-
 
 };
 
