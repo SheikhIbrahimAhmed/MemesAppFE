@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import { faCircleXmark, faUpload } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUpload, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 import axios from "axios";
+import React, { useState } from "react";
 import toast from "react-hot-toast";
-import CategoryDropdown from '../components/CategoryDropdown'
-import YouTubeSkeleton from "../components/Skeleton";
+import CategoryDropdown from '../components/CategoryDropdown';
 
 const MemePostPage = () => {
 
@@ -14,10 +13,8 @@ const MemePostPage = () => {
     const [selectedCategory, setSelectedCategory] = useState('');
 
 
-    const categories = ['Funny', 'Work', 'Motivational', 'Relatable', 'Sarcastic', 'Wholesome'];
-
-    const handleCategorySelect = (category) => {
-        setSelectedCategory(category);
+    const handleCategorySelect = (categoryId) => {
+        setSelectedCategory(categoryId); // Store only the categoryId
     };
 
     const validateTags = (selectedTags) => {
@@ -26,6 +23,7 @@ const MemePostPage = () => {
             .split(',')
             .map(tag => tag.trim())
             .filter(tag => tag);
+
         const uniqueTags = [...new Set(tagsArray)];
         if (uniqueTags.length !== tagsArray.length) {
             return { isValid: false, error: "Tags must not contain duplicates." };
@@ -52,9 +50,10 @@ const MemePostPage = () => {
 
         const postData = {
             tags: selectedTags?.split(","),
-            category: selectedCategory,
+            categoryId: selectedCategory,
             image: uploadedFilePath,
         };
+        console.log("PostData", postData)
         try {
             const response = await axios.post(
                 `${process.env.REACT_APP_API_URL}/api/post/create-post`,
@@ -136,12 +135,6 @@ const MemePostPage = () => {
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="flex flex-col gap-4 w-full">
-                        <label
-                            htmlFor="memeImage"
-                            className="w-full text-sm font-medium text-softWhite"
-                        >
-                            Upload Image
-                        </label>
                         <div className="w-full text-center bg-skyBlue text-darkBlue hover:bg-darkBlue hover:text-softWhite font-semibold rounded cursor-pointer focus:outline-none focus:ring-2 focus:ring-lightBeige focus:ring-offset-2">
                             <input
                                 type="file"
@@ -155,10 +148,10 @@ const MemePostPage = () => {
                             />
                             <label
                                 htmlFor="memeImage"
-                                className="w-full flex justify-center items-center text-center py-2 px-4 cursor-pointer"
+                                className="w-full flex justify-center items-center font-medium text-center py-2 px-4 cursor-pointer"
                             >
                                 <FontAwesomeIcon icon={faUpload} className="mr-2" />
-                                <p>Upload</p>
+                                <p>Select Meme Image</p>
                             </label>
                         </div>
                     </div>
@@ -184,13 +177,13 @@ const MemePostPage = () => {
                             />
                         </div>
                     )}
-                    <CategoryDropdown categories={categories} onSelect={handleCategorySelect} />
+                    <CategoryDropdown onSelect={handleCategorySelect} />
                     <input
                         id="tags"
                         value={selectedTags}
                         onChange={(e) => setSelectedTags(e.target.value)}
                         placeholder="Add commas separated tags to your meme"
-                        className="bg-skyBlue text-darkBlue w-full rounded-md px-3 py-2 text-sm focus:outline-none focus:ring focus:ring-skyBlue placeholder:text-darkBlue"
+                        className="bg-skyBlue text-darkBlue font-medium w-full rounded-md px-3 py-2 text-sm focus:outline-none focus:ring focus:ring-skyBlue placeholder:text-darkBlue"
                         required
                     />
                     <button

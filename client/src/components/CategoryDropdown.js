@@ -1,11 +1,37 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
+import useClickOutside from '../hooks/useClickOutside';
+import axios from 'axios';
 
-export default function CategoryDropdown({ categories, onSelect, bgColor = "skyBlue", textColor = "darkBlue" }) {
+export default function CategoryDropdown({ onSelect, bgColor = "skyBlue", textColor = "darkBlue" }) {
+
+    const [categories, setCategories] = useState([]);
+    const [isOpen, setIsOpen] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState('');
+    const dropdownRef = useRef(null);
 
+    useClickOutside(dropdownRef, () => {
+        dropdownRef.current.classList.add('hidden');
+    });
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const url = `${process.env.REACT_APP_API_URL}/api/post/get-categories`;
+                const response = await axios.get(url);
+                console.log("response.data", response.data)
+                setCategories(response.data); // Response should be [{ _id, name }]
+                console.log("Categories", categories)
+            } catch (error) {
+                console.error("Error fetching categories:", error.message);
+            }
+        };
+
+        fetchCategories();
+    }, []);
     const handleSelect = (category) => {
-        setSelectedCategory(category);
-        if (onSelect) onSelect(category);
+        setSelectedCategory(category.name);  // Store category name for display
+        onSelect(category._id); // Pass only the category ID to parent
+        setIsOpen(false);
     };
 
     return (
@@ -13,7 +39,7 @@ export default function CategoryDropdown({ categories, onSelect, bgColor = "skyB
             <button
                 type="button"
                 id="dropdown-button"
-                className={`w-full bg-${bgColor} border border-gray-300 text-${textColor} py-2 px-4 rounded-[10px] shadow-sm flex justify-between items-center focus:outline-none whitespace-nowrap`}
+                className={`w-full bg-${bgColor} border border-gray-300 text-${textColor} text-sm px-2 py-2 sm:px-3 rounded-[10px] shadow-sm flex justify-between items-center focus:outline-none whitespace-nowrap font-medium`}
                 onClick={(e) => {
                     const dropdown = e.currentTarget.nextElementSibling;
                     dropdown.classList.toggle('hidden');
@@ -32,18 +58,19 @@ export default function CategoryDropdown({ categories, onSelect, bgColor = "skyB
             </button>
 
             <ul
-                className="absolute w-full mt-2 bg-[#fff]  rounded-[10px] max-h-[120px] shadow-lg overflow-y-auto z-20 hidden"
+                ref={dropdownRef}
+                className="absolute w-full mt-2 bg-[#fff] rounded-[10px] max-h-[120px] shadow-lg overflow-y-auto z-20 hidden"
             >
                 {categories.map((category) => (
                     <li
-                        key={category}
+                        key={category._id}
                         onClick={() => {
                             handleSelect(category);
-                            document.getElementById('dropdown-button').nextElementSibling.classList.add('hidden');
+                            dropdownRef.current.classList.add('hidden');
                         }}
                         className="px-4 py-2 hover:bg-softWhite cursor-pointer"
                     >
-                        {category}
+                        {category.name}
                     </li>
                 ))}
             </ul>
